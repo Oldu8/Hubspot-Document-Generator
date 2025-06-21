@@ -1,0 +1,15 @@
+# local env files
+.env*.local
+.yml
+
+# HubSpot configuration
+hubspot.config.yml
+
+# production
+/build
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
