@@ -1,7 +1,7 @@
 {
   "type": "crm-card",
   "data": {
-    "title": "card.json hs_generator_oldu_v1",
+    "title": "Generate filled document Card",
     "description": "Create card, to get deal data to template and generate a Word document",
     "location": "crm.record.sidebar",
     "uid": "hs_generator_oldu_v1_app",

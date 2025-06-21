@@ -1,5 +1,5 @@
 {
-  "name": "App.json hs_generator_oldu_v1",
+  "name": "HS Document Generator",
   "description": "Get deal data to template and generate a Word document",
   "scopes": ["crm.objects.deals.read", "crm.objects.deals.write"],
   "uid": "hs_generator_oldu_v1_app",
