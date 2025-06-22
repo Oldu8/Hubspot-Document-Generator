@@ -5,10 +5,8 @@ import {
   Stack,
   LoadingSpinner,
   hubspot,
-  Box,
   Flex,
-  Alert,
-  List,
+  Link,
 } from "@hubspot/ui-extensions";
 
 hubspot.extend(({ context, actions }) => (
@@ -39,21 +37,18 @@ const fetch_data_arr = [
 // Main component
 const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [dealObj, setDealObj] = useState({});
 
   const generateDocument = async (doc_type) => {
     setIsGenerating(true);
 
     try {
       const properties = await fetchProperties(fetch_data_arr);
-      // get the all fields we need to fetch from Craig document
-      // setDealObj(properties);
-      sendAlert({
-        variant: "danger",
-        message: `Selected document type: ${doc_type}
-        Available data:
-        : ${JSON.stringify(properties)}`,
-      });
+      // sendAlert({
+      //   variant: "danger",
+      //   message: `Selected document type: ${doc_type}
+      //   Available data:
+      //   : ${JSON.stringify(properties)}`,
+      // });
 
       const response = await hubspot.serverless("generate", {
         propertiesToSend: fetch_data_arr,
@@ -62,24 +57,37 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         },
       });
 
-      const { document, mimeType, filename } = response;
+      const { document, mimeType, filename } = response.body;
 
-      const blob = new Blob(
-        [Uint8Array.from(atob(document), (c) => c.charCodeAt(0))],
-        {
-          type: mimeType,
-        }
-      );
+      const url = `data:${mimeType};base64,${document}`;
 
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      link.click();
-      // Call the serverless function to generate the document
-      // here will be request to server
-      // for now skip it
-      // to test return the empty document
+      // sendAlert({
+      //   variant: "success",
+      //   message: `create url: ${url}`,
+      // });
+
+      const html = `
+                    <html>
+                      <body style="padding: 2rem; font-family: sans-serif;">
+                        <h2>Document ready ${filename}</h2>
+                        <p>You can download the file below:</p>
+                        <a href="data:${mimeType};base64,${document}" download="${filename}">
+                          Click here to download
+                        </a>
+                      </body>
+                    </html>
+                  `;
+
+      const base64Html = btoa(unescape(encodeURIComponent(html)));
+      const htmlBlobUrl = `data:text/html;base64,${base64Html}`;
+
+      openIframeModal({
+        uri: htmlBlobUrl,
+        width: 800,
+        height: 600,
+        title: `Document: ${filename}`,
+        flush: false,
+      });
     } catch (error) {
       console.error("Error generating document:", error);
       sendAlert({
@@ -97,19 +105,6 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         Select what kind of document you want to generate with data from this
         deal.
       </Text>
-
-      {dealObj?.dealname ? (
-        <Box>
-          <Text format={{ fontWeight: "bold" }}>Selected deal:</Text>
-          <List variant="unordered-styled">
-            {Object.entries(dealObj).map(([key, value]) => (
-              <List.Item key={key}>
-                <Text>{`${key}: ${value}`}</Text>
-              </List.Item>
-            ))}
-          </List>
-        </Box>
-      ) : null}
 
       {isGenerating ? (
         <Stack direction="row" gap="small" align="center">
