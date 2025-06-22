@@ -34,6 +34,9 @@ const fetch_data_arr = [
   "company_city__sync_",
 ];
 
+const BASE_URL =
+  "https://hs-docx-backend-oleg-1814-oleh-dudkos-projects.vercel.app/api/generate";
+
 const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -53,17 +56,12 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
 
       sendAlert({
         variant: "danger",
-        message: `Selected document type: ${doc_name}
+        message: `
         Available data:
-        : ${JSON.stringify(response)}`,
+        : ${JSON.stringify(properties)}`,
       });
 
       const { document, mimeType, filename } = response.body;
-
-      // sendAlert({
-      //   variant: "success",
-      //   message: `create url: ${url}`,
-      // });
 
       const html = `
                     <html>
