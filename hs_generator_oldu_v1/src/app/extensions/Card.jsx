@@ -6,6 +6,9 @@ import {
   LoadingSpinner,
   hubspot,
   Box,
+  Flex,
+  Alert,
+  List,
 } from "@hubspot/ui-extensions";
 
 hubspot.extend(({ context, actions }) => (
@@ -38,13 +41,19 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [dealObj, setDealObj] = useState({});
 
-  const generateDocument = async () => {
+  const generateDocument = async (doc_type) => {
     setIsGenerating(true);
 
     try {
       const properties = await fetchProperties(fetch_data_arr);
       // get the all fields we need to fetch from Craig document
-      setDealObj(properties);
+      // setDealObj(properties);
+      sendAlert({
+        variant: "danger",
+        message: `Selected document type: ${doc_type}
+        Available data:
+        : ${JSON.stringify(properties)}`,
+      });
       // Call the serverless function to generate the document
       // here will be request to server
       // for now skip it
@@ -86,13 +95,43 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
           <Text>Generating document...</Text>
         </Stack>
       ) : (
-        <Button
-          variant="primary"
-          onClick={generateDocument}
-          disabled={isGenerating}
-        >
-          Generate Word Document
-        </Button>
+        <Flex direction={"column"} gap={"small"}>
+          <Button
+            variant="primary"
+            onClick={() => generateDocument("sj_medconnect_csa")}
+            disabled={isGenerating}
+          >
+            SJ MedConnect CSA
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => generateDocument("sj_medconnect_msa")}
+            disabled={isGenerating}
+          >
+            SJ MedConnect MSA
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => generateDocument("sj_medconnect_sow")}
+            disabled={isGenerating}
+          >
+            SJ MedConnect SOW
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => generateDocument("thalamus_institutional_quote")}
+            disabled={isGenerating}
+          >
+            Thalamus Institutional Quote
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => generateDocument("thalamus_departmental_quote")}
+            disabled={isGenerating}
+          >
+            Thalamus Departmental Quote
+          </Button>
+        </Flex>
       )}
 
       <Text variant="microcopy" format={{ italic: true }}>
