@@ -34,32 +34,31 @@ const fetch_data_arr = [
   "company_city__sync_",
 ];
 
-// Main component
 const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateDocument = async (doc_type) => {
+  const generateDocument = async (doc_name) => {
     setIsGenerating(true);
 
     try {
       const properties = await fetchProperties(fetch_data_arr);
-      // sendAlert({
-      //   variant: "danger",
-      //   message: `Selected document type: ${doc_type}
-      //   Available data:
-      //   : ${JSON.stringify(properties)}`,
-      // });
 
       const response = await hubspot.serverless("generate", {
         propertiesToSend: fetch_data_arr,
         parameters: {
           userId: context.user.id,
+          doc_name: doc_name,
         },
       });
 
-      const { document, mimeType, filename } = response.body;
+      sendAlert({
+        variant: "danger",
+        message: `Selected document type: ${doc_name}
+        Available data:
+        : ${JSON.stringify(response)}`,
+      });
 
-      const url = `data:${mimeType};base64,${document}`;
+      const { document, mimeType, filename } = response.body;
 
       // sendAlert({
       //   variant: "success",
@@ -115,35 +114,35 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         <Flex direction={"column"} gap={"small"}>
           <Button
             variant="primary"
-            onClick={() => generateDocument("sj_medconnect_csa")}
+            onClick={() => generateDocument("SOW_v250609")}
             disabled={isGenerating}
           >
             SJ MedConnect CSA
           </Button>
           <Button
             variant="primary"
-            onClick={() => generateDocument("sj_medconnect_msa")}
+            onClick={() => generateDocument("MSA_v250321")}
             disabled={isGenerating}
           >
             SJ MedConnect MSA
           </Button>
           <Button
             variant="primary"
-            onClick={() => generateDocument("sj_medconnect_sow")}
+            onClick={() => generateDocument("SOW_v250321")}
             disabled={isGenerating}
           >
             SJ MedConnect SOW
           </Button>
           <Button
             variant="primary"
-            onClick={() => generateDocument("thalamus_institutional_quote")}
+            onClick={() => generateDocument("Institutional_v250507")}
             disabled={isGenerating}
           >
             Thalamus Institutional Quote
           </Button>
           <Button
             variant="primary"
-            onClick={() => generateDocument("thalamus_departmental_quote")}
+            onClick={() => generateDocument("Departmental_v250507")}
             disabled={isGenerating}
           >
             Thalamus Departmental Quote
