@@ -1,0 +1,7 @@
+{
+  "generate": {
+    "path": "generate",
+    "method": "POST",
+    "auth": "public"
+  }
+}

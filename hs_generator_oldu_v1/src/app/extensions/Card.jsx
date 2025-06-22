@@ -54,6 +54,24 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         Available data:
         : ${JSON.stringify(properties)}`,
       });
+
+      const response = await hubspot.serverless("generate", {
+        propertiesToSend: fetch_data_arr,
+        parameters: {
+          userId: context.user.id,
+        },
+      });
+
+      const res = await fetch("/_hfunctions/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          documentType: doc_type,
+          dealData: properties,
+        }),
+      });
       // Call the serverless function to generate the document
       // here will be request to server
       // for now skip it
