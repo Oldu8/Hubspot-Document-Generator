@@ -62,16 +62,20 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         },
       });
 
-      const res = await fetch("/_hfunctions/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          documentType: doc_type,
-          dealData: properties,
-        }),
-      });
+      const { document, mimeType, filename } = response;
+
+      const blob = new Blob(
+        [Uint8Array.from(atob(document), (c) => c.charCodeAt(0))],
+        {
+          type: mimeType,
+        }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.click();
       // Call the serverless function to generate the document
       // here will be request to server
       // for now skip it
