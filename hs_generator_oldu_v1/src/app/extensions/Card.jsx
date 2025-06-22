@@ -4,7 +4,6 @@ import {
   Text,
   Stack,
   LoadingSpinner,
-  List,
   hubspot,
   Box,
 } from "@hubspot/ui-extensions";
@@ -18,6 +17,22 @@ hubspot.extend(({ context, actions }) => (
   />
 ));
 
+const fetch_data_arr = [
+  "dealname",
+  "institution_name_sync",
+  "acgme_institution_id_sync",
+  "associated_program_id__sync_",
+  "specialty",
+  "thalamus_core_id__sync_",
+  "product_name",
+  "cost",
+  "eras_program__sync_",
+  "company_street_address__sync_",
+  "company_zip__sync_",
+  "company_state_sync_",
+  "company_city__sync_",
+];
+
 // Main component
 const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -27,7 +42,7 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
     setIsGenerating(true);
 
     try {
-      const properties = await fetchProperties(["dealname"]);
+      const properties = await fetchProperties(fetch_data_arr);
       // get the all fields we need to fetch from Craig document
       setDealObj(properties);
       // Call the serverless function to generate the document
@@ -52,7 +67,7 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         deal.
       </Text>
 
-      {dealObj ? (
+      {dealObj?.dealname ? (
         <Box>
           <Text format={{ fontWeight: "bold" }}>Selected deal:</Text>
           <List variant="unordered-styled">
