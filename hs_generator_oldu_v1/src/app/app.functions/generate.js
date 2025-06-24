@@ -49,19 +49,16 @@ exports.main = async (context = {}) => {
 
   const token = process.env["PRIVATE_APP_ACCESS_TOKEN"];
 
-  console.log("🧪 Parameters:", parameters);
+  // console.log("🧪 Parameters:", parameters);
 
   // const objectType = "0-3";
   // const toObjectType = "2-41599976";
-
-  let recordIds = [];
 
   const body = JSON.stringify({
     inputs: [{ id: objectId }],
   });
 
   try {
-    console.log("!!!!!!! Start request");
     const response = await fetch(
       "https://api.hubapi.com/crm/v3/associations/deal/2-41599976/batch/read",
       {
@@ -76,14 +73,29 @@ exports.main = async (context = {}) => {
     );
 
     const data = await response.json();
-    console.log("Associated records:", data);
-    const results = data?.results?.map((result) => result.to[0]?.id) || [];
-    console.log("got the ids::", results);
+    const recordIdArr = data?.results?.map((result) => result.to[0]?.id) || [];
+    console.log("got the ids::", recordIdArr);
+
+    const propertiesList =
+      "?properties=product_name,cost,associated_program_id__sync_,specialty,thalamus_core_id__sync_";
+
+    const productsRequests = recordIdArr.map((recordId) => {
+      return fetch(
+        `https://api.hubapi.com/crm/v3/objects/2-41599976/${recordId}${propertiesList}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ).then((response) => response.json());
+    });
+
+    const productsResponses = await Promise.all(productsRequests);
+    console.log("got the products::", productsResponses);
   } catch (e) {
     console.error(e);
   }
-
-  // console.log("🧾 Associated Thalamus Product IDs:", recordIds);
 
   if (!doc_name) {
     return {
