@@ -20,22 +20,21 @@ hubspot.extend(({ context, actions }) => (
 
 const fetch_data_arr = [
   "dealname",
+  "record_id",
+  "recordId",
   "institution_name_sync",
   "acgme_institution_id_sync",
-  "associated_program_id__sync_",
-  "specialty",
-  "thalamus_core_id__sync_",
-  "product_name",
-  "cost",
-  "eras_program__sync_",
+  // "associated_program_id__sync_",
+  // "specialty",
+  // "thalamus_core_id__sync_",
+  // "product_name",
+  // "cost",
+  // "eras_program__sync_",
   "company_street_address__sync_",
   "company_zip__sync_",
   "company_state_sync_",
   "company_city__sync_",
 ];
-
-const BASE_URL =
-  "https://hs-docx-backend-oleg-1814-oleh-dudkos-projects.vercel.app/api/generate";
 
 const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -51,12 +50,14 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         parameters: {
           userId: context.user.id,
           doc_name: doc_name,
+          objectId: context?.crm?.objectId,
         },
       });
 
       sendAlert({
         variant: "danger",
         message: `
+        context : ${JSON.stringify(context)}
         Available data:
         : ${JSON.stringify(properties)}`,
       });

@@ -45,7 +45,45 @@ function postJsonRequest(url, data) {
 
 exports.main = async (context = {}) => {
   const { parameters = {}, propertiesToSend = {} } = context;
-  const { doc_name = "" } = parameters;
+  const { userId = "", doc_name = "", objectId = "" } = parameters;
+
+  const token = process.env["PRIVATE_APP_ACCESS_TOKEN"];
+
+  console.log("🧪 Parameters:", parameters);
+
+  // const objectType = "0-3";
+  // const toObjectType = "2-41599976";
+
+  let recordIds = [];
+
+  const body = JSON.stringify({
+    inputs: [{ id: objectId }],
+  });
+
+  try {
+    console.log("!!!!!!! Start request");
+    const response = await fetch(
+      "https://api.hubapi.com/crm/v3/associations/deal/2-41599976/batch/read",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(body),
+        },
+        body,
+      }
+    );
+
+    const data = await response.json();
+    console.log("Associated records:", data);
+    const results = data?.results?.map((result) => result.to[0]?.id) || [];
+    console.log("got the ids::", results);
+  } catch (e) {
+    console.error(e);
+  }
+
+  // console.log("🧾 Associated Thalamus Product IDs:", recordIds);
 
   if (!doc_name) {
     return {
@@ -57,6 +95,13 @@ exports.main = async (context = {}) => {
   const data = {
     institution_name: propertiesToSend.institution_name_sync,
     gme_id: propertiesToSend.acgme_institution_id_sync,
+    address: {
+      street: propertiesToSend.company_street_address__sync_,
+      city: propertiesToSend.company_city__sync_,
+      state: propertiesToSend.company_state_sync_,
+      zip: propertiesToSend.company_zip__sync_,
+    },
+    products: [],
   };
 
   const backendUrl =

@@ -2,7 +2,7 @@
   "appFunctions": {
     "generate": {
       "file": "generate.js",
-      "secrets": []
+      "secrets": ["hs_access_token"]
     }
   }
 }
