@@ -69,7 +69,7 @@ exports.main = async (context = {}) => {
     const recordIdArr = data?.results?.map((result) => result.to[0]?.id) || [];
 
     const propertiesList =
-      "?properties=product_name,cost,associated_program_id__sync_,specialty,thalamus_core_id__sync_";
+      "?properties=product_name,cost,associated_program_id__sync_,specialty,thalamus_core_id__sync_,eras_program__sync_";
 
     const productsRequests = recordIdArr.map((recordId) => {
       return fetch(
