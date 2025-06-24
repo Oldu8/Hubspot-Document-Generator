@@ -43,7 +43,6 @@ exports.main = async (context = {}) => {
   const token = process.env["PRIVATE_APP_ACCESS_TOKEN"];
   const externalBackendUrl =
     "https://hs-docx-backend-oleg-1814-oleh-dudkos-projects.vercel.app/api/generate";
-
   // const objectType = "0-3";
   // const toObjectType = "2-41599976";
 
@@ -86,13 +85,13 @@ exports.main = async (context = {}) => {
     const productsResponses = await Promise.all(productsRequests);
 
     const dataToSend = {
-      institution_name: propertiesToSend.institution_name_sync,
-      gme_id: propertiesToSend.acgme_institution_id_sync,
+      institution_name: propertiesToSend.institution_name_sync || "",
+      gme_id: propertiesToSend.acgme_institution_id_sync || "",
       address: {
-        street: propertiesToSend.company_street_address__sync_,
-        city: propertiesToSend.company_city__sync_,
-        state: propertiesToSend.company_state_sync_,
-        zip: propertiesToSend.company_zip__sync_,
+        street: propertiesToSend.company_street_address__sync_ || "",
+        city: propertiesToSend.company_city__sync_ || "",
+        state: propertiesToSend.company_state_sync_ || "",
+        zip: propertiesToSend.company_zip__sync_ || "",
       },
       products: productsResponses,
     };

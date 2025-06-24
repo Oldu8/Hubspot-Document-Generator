@@ -6,7 +6,6 @@ import {
   LoadingSpinner,
   hubspot,
   Flex,
-  Link,
 } from "@hubspot/ui-extensions";
 
 hubspot.extend(({ context, actions }) => (
@@ -24,12 +23,6 @@ const fetch_data_arr = [
   "recordId",
   "institution_name_sync",
   "acgme_institution_id_sync",
-  // "associated_program_id__sync_",
-  // "specialty",
-  // "thalamus_core_id__sync_",
-  // "product_name",
-  // "cost",
-  // "eras_program__sync_",
   "company_street_address__sync_",
   "company_zip__sync_",
   "company_state_sync_",
@@ -54,15 +47,15 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         },
       });
 
+      const { document, mimeType, filename } = response.body;
+
       sendAlert({
         variant: "danger",
         message: `
-        context : ${JSON.stringify(context)}
+        context : ${JSON.stringify(mimeType)}
         Available data:
-        : ${JSON.stringify(properties)}`,
+        : ${JSON.stringify(filename)}`,
       });
-
-      const { document, mimeType, filename } = response.body;
 
       const html = `
                     <html>
