@@ -41,10 +41,7 @@ exports.main = async (context = {}) => {
   const { userId = "", doc_name = "", objectId = "" } = parameters;
 
   const token = process.env["PRIVATE_APP_ACCESS_TOKEN"];
-  const externalBackendUrl =
-    "https://hs-docx-backend-oleg-1814-oleh-dudkos-projects.vercel.app/api/generate";
-  // const objectType = "0-3";
-  // const toObjectType = "2-41599976";
+  const externalBackendUrl = "https://hs-docx-backend.vercel.app/api/generate";
 
   const body = JSON.stringify({
     inputs: [{ id: objectId }],
@@ -65,8 +62,8 @@ exports.main = async (context = {}) => {
     );
 
     const data = await response.json();
-    const recordIdArr = data?.results?.map((result) => result.to[0]?.id) || [];
 
+    const recordIdArr = data?.results[0]?.to?.map((result) => result.id) || [];
     const propertiesList =
       "?properties=product_name,cost,associated_program_id__sync_,specialty,thalamus_core_id__sync_,eras_program__sync_";
 
@@ -99,6 +96,7 @@ exports.main = async (context = {}) => {
     console.log("sending data to custom backend::", dataToSend);
 
     const result = await postJsonRequest(externalBackendUrl, {
+      deal_name: propertiesToSend.dealname || "",
       doc_name,
       data: dataToSend,
     });
@@ -110,11 +108,8 @@ exports.main = async (context = {}) => {
       body: {
         success: true,
         message: "DOCX document generated",
-        filename: result.filename || `institution_quote_${Date.now()}.docx`,
-        document: result.document,
-        mimeType:
-          result.mimeType ||
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        filename: result.filename,
+        url: result.url,
       },
     };
   } catch (e) {

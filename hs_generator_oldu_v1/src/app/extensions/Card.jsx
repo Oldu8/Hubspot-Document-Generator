@@ -47,22 +47,14 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
         },
       });
 
-      const { document, mimeType, filename } = response.body;
-
-      sendAlert({
-        variant: "danger",
-        message: `
-        context : ${JSON.stringify(mimeType)}
-        Available data:
-        : ${JSON.stringify(filename)}`,
-      });
+      const { url, filename } = response.body;
 
       const html = `
                     <html>
                       <body style="padding: 2rem; font-family: sans-serif;">
-                        <h2>Document ready ${filename}</h2>
+                        <h2>Document ready: ${filename}</h2>
                         <p>You can download the file below:</p>
-                        <a href="data:${mimeType};base64,${document}" download="${filename}">
+                        <a href="${url}" download="${filename}">
                           Click here to download
                         </a>
                       </body>
@@ -109,42 +101,38 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
             onClick={() => generateDocument("SOW_v250609")}
             disabled={isGenerating}
           >
-            SJ MedConnect CSA
+            CSA
           </Button>
           <Button
             variant="primary"
             onClick={() => generateDocument("MSA_v250321")}
             disabled={isGenerating}
           >
-            SJ MedConnect MSA
+            MSA
           </Button>
           <Button
             variant="primary"
             onClick={() => generateDocument("SOW_v250321")}
             disabled={isGenerating}
           >
-            SJ MedConnect SOW
+            SOW
           </Button>
           <Button
             variant="primary"
             onClick={() => generateDocument("Institutional_v250507")}
             disabled={isGenerating}
           >
-            Thalamus Institutional Quote
+            Institutional Quote
           </Button>
           <Button
             variant="primary"
             onClick={() => generateDocument("Departmental_v250507")}
             disabled={isGenerating}
           >
-            Thalamus Departmental Quote
+            Departmental Quote
           </Button>
         </Flex>
       )}
-
-      <Text variant="microcopy" format={{ italic: true }}>
-        The document will include the deal name and basic information.
-      </Text>
     </Stack>
   );
 };
