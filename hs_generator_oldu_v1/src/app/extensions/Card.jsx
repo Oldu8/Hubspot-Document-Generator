@@ -25,7 +25,7 @@ const fetch_data_arr = [
   "acgme_institution_id_sync",
   "company_street_address__sync_",
   "company_zip__sync_",
-  "company_state_sync_",
+  "company_state__sync_",
   "company_city__sync_",
 ];
 
@@ -101,7 +101,7 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
             onClick={() => generateDocument("SOW_v250609")}
             disabled={isGenerating}
           >
-            CSA
+            CSA SOW
           </Button>
           <Button
             variant="primary"
@@ -115,21 +115,21 @@ const Card = ({ context, sendAlert, fetchProperties, openIframeModal }) => {
             onClick={() => generateDocument("SOW_v250321")}
             disabled={isGenerating}
           >
-            SOW
+            MSA SOW
           </Button>
           <Button
             variant="primary"
             onClick={() => generateDocument("Institutional_v250507")}
             disabled={isGenerating}
           >
-            Institutional Quote
+            Institution Quote
           </Button>
           <Button
             variant="primary"
             onClick={() => generateDocument("Departmental_v250507")}
             disabled={isGenerating}
           >
-            Departmental Quote
+            Program/Dept. Quote
           </Button>
         </Flex>
       )}

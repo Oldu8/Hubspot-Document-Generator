@@ -65,7 +65,7 @@ exports.main = async (context = {}) => {
 
     const recordIdArr = data?.results[0]?.to?.map((result) => result.id) || [];
     const propertiesList =
-      "?properties=product_name,cost,associated_program_id__sync_,specialty,thalamus_core_id__sync_,eras_program__sync_";
+      "?properties=product_name,amount,associated_program_id,specialty,thalamus_core_id__sync_,eras_program";
 
     const productsRequests = recordIdArr.map((recordId) => {
       return fetch(
@@ -87,7 +87,7 @@ exports.main = async (context = {}) => {
       address: {
         street: propertiesToSend.company_street_address__sync_ || "",
         city: propertiesToSend.company_city__sync_ || "",
-        state: propertiesToSend.company_state_sync_ || "",
+        state: propertiesToSend.company_state__sync_ || "",
         zip: propertiesToSend.company_zip__sync_ || "",
       },
       products: productsResponses,
